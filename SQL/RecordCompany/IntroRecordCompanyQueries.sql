@@ -116,3 +116,24 @@ select
 from record_company.dbo.bands bands
 inner join record_company.dbo.albums albums ON bands.id  = albums.band_id
 where albums.release_year = 2018
+
+-- shows a band and the number of albums they have and most recent album release year using group by
+select 
+	bands.id AS BandID,
+	bands.name AS BandName,
+	count(albums.id) as NumberofAlbums, 
+	max(albums.release_year) as LatestReleaseYear
+from record_company.dbo.bands bands
+inner join record_company.dbo.albums albums ON bands.id  = albums.band_id
+group by bands.id, bands.name;
+
+-- shows a band and the number of albums they have and most recent album release year using windows functions
+select distinct 
+	bands.id AS BandID,
+	bands.name AS BandName,
+	count(albums.id) over(partition by bands.id) as NumberofAlbums, 
+	max(albums.release_year) over(partition by bands.id) as LatestReleaseYear
+from record_company.dbo.bands bands
+inner join record_company.dbo.albums albums ON bands.id  = albums.band_id
+
+
